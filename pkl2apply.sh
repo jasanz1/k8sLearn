@@ -24,3 +24,5 @@ pkl eval "$INPUT" --format yaml > "$OUTPUT"
 
 echo "Converted '$INPUT' -> '$OUTPUT'"
 bat $OUTPUT
+
+kubectl apply -f "$OUTPUT"

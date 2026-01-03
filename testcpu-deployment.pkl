@@ -1,0 +1,35 @@
+apiVersion = "apps/v1" 
+kind = "Deployment" 
+metadata{
+  labels {
+    app = "synergychat-testcpu"
+  }
+  name = "synergychat-testcpu" 
+}
+spec {
+    selector {
+      matchLabels {
+        app = "synergychat-testcpu" 
+      }
+    }
+  template {
+    metadata {
+      labels {
+        app = "synergychat-testcpu" 
+      }
+    }
+    spec {
+      containers {
+        new {
+          image =  "bootdotdev/synergychat-testcpu:latest"
+            name =  "synergychat-testcpu"
+            resources {
+              limits {
+                cpu = "50m"
+              }
+            }
+        }
+      }
+    }
+  }
+}
