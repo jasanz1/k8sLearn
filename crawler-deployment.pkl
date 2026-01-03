@@ -5,6 +5,7 @@ metadata  {
     labels  {
       app = "synergychat-crawler"
     }
+    namespace = "crawler"
 }
 
 spec  {
@@ -21,21 +22,114 @@ spec  {
       }
     }
     spec  {
-      containers  {
+      volumes  {
         new {
-          name  = "synergychat-crawler"
+          name = "cache-volume"
+            emptyDir  {
+            }
+        }
+      }
+      containers  {
+
+        new {
+          name  = "synergychat-crawler-1"
             image = "bootdotdev/synergychat-crawler:latest"
             envFrom {
               new {
-                    configMapRef {
+                configMapRef {
+                  name = "synergychat-crawler-configmap"
+                }
+              }
+            }
+          volumeMounts  {
+            new {
+              name = "cache-volume"
+                mountPath = "/cache"
+            }
+          }
+        }
+        new {
+          name  = "synergychat-crawler-2"
+            image = "bootdotdev/synergychat-crawler:latest"
+            env {
+              new {
+                name = "CRAWLER_PORT"
+                  valueFrom  {
+                    configMapKeyRef  {
                       name = "synergychat-crawler-configmap"
+                        key = "CRAWLER_PORT_2"
+                    }
+                  }
+              }
+              new  {
+                name = "CRAWLER_KEYWORDS"
+                  valueFrom  {
+                    configMapKeyRef  {
+                      name = "synergychat-crawler-configmap"
+                        key = "CRAWLER_KEYWORDS"
+                    }
+                  }
+              }
+              new {
+                name = "CRAWLER_DB_PATH"
+                  valueFrom {
+                    configMapKeyRef  {
+                      name = "synergychat-crawler-configmap"
+                        key = "CRAWLER_DB_PATH"
                     }
                   }
               }
             }
+          volumeMounts  {
+            new {
+              name = "cache-volume"
+                mountPath = "/cache"
+            }
+          }
+        }
+        new {
+          name  = "synergychat-crawler-3"
+            image = "bootdotdev/synergychat-crawler:latest"
+            env {
+              new {
+                name = "CRAWLER_PORT"
+                  valueFrom  {
+                    configMapKeyRef  {
+                      name = "synergychat-crawler-configmap"
+                        key = "CRAWLER_PORT_3"
+                    }
+                  }
+              }
+              new  {
+                name = "CRAWLER_KEYWORDS"
+                  valueFrom  {
+                    configMapKeyRef  {
+                      name = "synergychat-crawler-configmap"
+                        key = "CRAWLER_KEYWORDS"
+                    }
+                  }
+              }
+              new {
+                name = "CRAWLER_DB_PATH"
+                  valueFrom {
+                    configMapKeyRef  {
+                      name = "synergychat-crawler-configmap"
+                        key = "CRAWLER_DB_PATH"
+                    }
+                  }
+              }
+            }
+          volumeMounts  {
+            new {
+              name = "cache-volume"
+                mountPath = "/cache"
+            }
+          }
         }
       }
     }
   }
+}
+
 
 
